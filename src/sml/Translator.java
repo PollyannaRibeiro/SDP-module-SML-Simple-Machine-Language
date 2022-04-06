@@ -1,6 +1,7 @@
 package sml;
 
-import sml.instructions.AddInstruction;
+import sml.instructions.*;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -93,6 +94,44 @@ public final class Translator {
                 s2 = scanInt();
                 return new AddInstruction(label, r, s1, s2);
             }
+            case "sub" -> {
+                r = scanInt();
+                s1 = scanInt();
+                s2 = scanInt();
+                return new SubInstruction(label, r, s1, s2);
+            }
+            case "mul" -> {
+                r = scanInt();
+                s1 = scanInt();
+                s2 = scanInt();
+                return new MulInstruction(label, r, s1, s2);
+            }
+            case "div" -> {
+                r = scanInt();
+                s1 = scanInt();
+                s2 = scanInt();
+                return new DivInstruction(label, r, s1, s2);
+            }
+            case "out" -> {
+                r = scanInt();
+                s1 = scanInt();
+                s2 = scanInt();
+                return new OutInstruction(label, r, s1, s2);
+            }
+            case "lin" -> {
+                r = scanInt();
+                s1 = scanInt();
+                s2 = scanInt();
+                return new LinInstruction(label, r, s1, s2);
+            }
+            case "bnz" -> {
+                r = scanInt();
+                s1 = scanInt();
+                s2 = scanInt();
+                return new BnzInstruction(label, r, s1, s2);
+            }
+
+
             // TODO: You will have to write code here for the other instructions.
 
             default -> {
