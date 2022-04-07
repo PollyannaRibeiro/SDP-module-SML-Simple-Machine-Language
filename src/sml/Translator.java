@@ -80,6 +80,8 @@ public final class Translator {
         int s1; // Possible operands of the instruction
         int s2;
         int r;
+        int x;
+        String L2;
         String lbl;
 
         if (line.equals("")) {
@@ -113,26 +115,19 @@ public final class Translator {
                 return new DivInstruction(label, r, s1, s2);
             }
             case "out" -> {
-                r = scanInt();
                 s1 = scanInt();
-                s2 = scanInt();
-                return new OutInstruction(label, r, s1, s2);
+                return new OutInstruction(label, s1);
             }
             case "lin" -> {
                 r = scanInt();
-                s1 = scanInt();
-                s2 = scanInt();
-                return new LinInstruction(label, r, s1, s2);
+                x = scanInt();
+                return new LinInstruction(label, r, x);
             }
             case "bnz" -> {
-                r = scanInt();
                 s1 = scanInt();
-                s2 = scanInt();
-                return new BnzInstruction(label, r, s1, s2);
+                L2 = scan();
+                return new BnzInstruction(label, s1, L2);
             }
-
-
-            // TODO: You will have to write code here for the other instructions.
 
             default -> {
                 System.out.println("Unknown instruction: " + opCode);
