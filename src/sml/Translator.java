@@ -126,7 +126,8 @@ public final class Translator {
             case "bnz" -> {
                 s1 = scanInt();
                 L2 = scan();
-                return new BnzInstruction(label, s1, L2);
+                LabelAccessor l2 = new LabelAccessor(L2);
+                return new BnzInstruction(label, s1, l2);
             }
 
             default -> {
