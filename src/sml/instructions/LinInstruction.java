@@ -16,4 +16,9 @@ public class LinInstruction extends Instruction {
     public void execute(Machine m) {
         m.getRegisters().setRegister(this.register, x);
     }
+
+    @Override
+    public String toString() {
+        return "Label: " + this.getLabel() + ", Store integer" + this.x + " in register " + this.register ;
+    }
 }

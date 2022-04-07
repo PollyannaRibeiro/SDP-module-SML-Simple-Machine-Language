@@ -12,8 +12,11 @@ public class OutInstruction extends Instruction {
 
     @Override
     public void execute(Machine m) {
-
         System.out.println("OUT: "+ m.getRegisters().getRegister(this.s1));
+    }
 
+    @Override
+    public String toString() {
+        return "Label: " + this.getLabel() + ", Print the contents of register " + this.s1 + " on the console" ;
     }
 }

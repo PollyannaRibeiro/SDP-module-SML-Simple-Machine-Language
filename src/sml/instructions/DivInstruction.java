@@ -23,4 +23,9 @@ public class DivInstruction extends Instruction {
 
         m.getRegisters().setRegister(this.register, div);
     }
+
+    @Override
+    public String toString() {
+        return "Label: " + this.getLabel() + ", Divide the contents of registers " + this.s1 + " and " + this.s2 + " and store the result in register " + this.register ;
+    }
 }

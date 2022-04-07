@@ -13,6 +13,9 @@ public class AddInstruction extends Instruction {
     private int s1;
     private int s2;
 
+    private int n1;
+    private int n2;
+
     public AddInstruction(String label, int register, int s1, int s2){
         super(label, "add");
         this.register = register;
@@ -23,11 +26,15 @@ public class AddInstruction extends Instruction {
     @Override
     public void execute(Machine m) {
 
-        int n1 = m.getRegisters().getRegister(this.s1);
-        int n2 = m.getRegisters().getRegister(this.s2);
+        n1 = m.getRegisters().getRegister(this.s1);
+        n2 = m.getRegisters().getRegister(this.s2);
         int sum = n1+n2;
 
         m.getRegisters().setRegister(this.register, sum);
+    }
 
+    @Override
+    public String toString() {
+        return "Label: " + this.getLabel() + ", Add the contents of registers " + this.s1 + " and " + this.s2 + " and store the result in register " + this.register ;
     }
 }

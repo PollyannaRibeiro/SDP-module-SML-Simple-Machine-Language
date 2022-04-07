@@ -23,4 +23,9 @@ public class MulInstruction extends Instruction {
 
         m.getRegisters().setRegister(this.register, mul);
     }
+
+    @Override
+    public String toString() {
+        return "Label: " + this.getLabel() + ", Multiply the contents of registers " + this.s1 + " and " + this.s2 + " and store the result in register " + this.register ;
+    }
 }

@@ -23,5 +23,10 @@ public class SubInstruction extends Instruction {
 
         m.getRegisters().setRegister(this.register, sub);
     }
+
+    @Override
+    public String toString() {
+        return "Label: " + this.getLabel() + ", Subtract the contents of registers " + this.s1 + " and " + this.s2 + " and store the result in register " + this.register ;
+    }
 }
 
