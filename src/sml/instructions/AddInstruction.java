@@ -9,9 +9,9 @@ import sml.Machine;
  * @author ...
  */
 public class AddInstruction extends Instruction {
-    int register;
-    int s1;
-    int s2;
+    private int register;
+    private int s1;
+    private int s2;
 
     public AddInstruction(String label, int register, int s1, int s2){
         super(label, "add");
@@ -25,7 +25,6 @@ public class AddInstruction extends Instruction {
 
         int n1 = m.getRegisters().getRegister(this.s1);
         int n2 = m.getRegisters().getRegister(this.s2);
-
         int sum = n1+n2;
 
         m.getRegisters().setRegister(this.register, sum);
