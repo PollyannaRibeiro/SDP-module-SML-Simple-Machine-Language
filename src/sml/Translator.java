@@ -1,13 +1,7 @@
 package sml;
 
-import sml.instructions.*;
-
-
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.lang.String;
 
@@ -76,69 +70,23 @@ public final class Translator {
         return true;
     }
 
-//    REFLECTION
-    private Instruction createReflectionWithCaseSwitch(String opcode, String label) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException {
-
-//      find the path
-        char firstLetterOpcode = opcode.charAt(0);
-        String op = Character.toString(firstLetterOpcode).toUpperCase()+opcode.substring(1);
-
-        Class<?> klass = Class.forName("sml.instructions."+op+"Instruction");
-
-        Constructor<?> cons = klass.getDeclaredConstructors()[0];
-//        System.out.println(Arrays.toString(cons.getParameterTypes()));
-//        System.out.println(Arrays.toString(cons.getAnnotatedParameterTypes()));
-
-        Class<?>[] parameters = cons.getParameterTypes();
-        Object[] dependencies = new Object[parameters.length];
-
-//      start from 1 because we already have the label
-        for (int i = 1; i < parameters.length; i++) {
-            Class<?> parameter =  parameters[i];
-            if (parameter.getTypeName() == "java.lang.String") {
-                dependencies[i] = scan();
-            } else if (parameter.getTypeName() == "int") {
-                dependencies[i] = scanInt();
-            } else if (parameter.getTypeName() == "sml.LabelAccessor") {
-                dependencies[i] = new LabelAccessor(scan());
-            }
-        }
-
-        if (dependencies.length == 2) {
-            return (Instruction) cons.newInstance(label, dependencies[1]);
-        } else if (dependencies.length == 3) {
-            return (Instruction) cons.newInstance(label, dependencies[1], dependencies[2]);
-        } else if (dependencies.length == 4) {
-            return (Instruction) cons.newInstance(label, dependencies[2], dependencies[2], dependencies[3]);
-        } else {
-            throw new ClassNotFoundException();
-        }
-    }
 
     // The input line should consist of an SML instruction, with its label already removed.
     // Translate line into an instruction with label "label" and return the instruction
     public Instruction getInstruction(String label) {
-        
+
         if (line.equals("")) {
             return null;
         }
         var opCode = scan();
 
+        InstructionFactory factory = new InstructionFactory();
+        ScanAccessor scan = new ScanAccessor(
+                () ->{ return scanInt(); },
+                () ->{ return scan(); }
+        );
 
-        try {
-            return createReflectionWithCaseSwitch(opCode, label);
-        } catch (ClassNotFoundException e) {
-            System.out.println("Unknown instruction: " + opCode);
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        return null; // FIX THIS
+        return factory.createInstruction(label, opCode, scan);
     }
 
     /*
