@@ -5,6 +5,7 @@ import sml.instructions.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -74,6 +75,39 @@ public final class Translator {
         return true;
     }
 
+    private Instruction createReflectionWithCaseSwitch(String label) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException {
+
+        Class<?> klass = Class.forName("sml.instructions.BnzInstruction");
+//        System.out.println("😅");
+        Constructor<?> cons = klass.getDeclaredConstructors()[0];
+        System.out.println(Arrays.toString(cons.getParameterTypes()));
+        System.out.println(Arrays.toString(cons.getAnnotatedParameterTypes()));
+
+        Class<?>[] parameters = cons.getParameterTypes();
+        Object[] dependencies = new Object[parameters.length];
+//start from 1 because we already have the label
+        for (int i = 1; i < parameters.length; i++) {
+            Class<?> parameter =  parameters[i];
+            if (parameter.getTypeName() == "java.lang.String") {
+                dependencies[i] = scan();
+            } else if (parameter.getTypeName() == "int") {
+                dependencies[i] = scanInt();
+            } else if (parameter.getTypeName() == "sml.LabelAccessor") {
+                dependencies[i] = new LabelAccessor(scan());
+            }
+        }
+
+        if (dependencies.length == 2) {
+            return (Instruction) cons.newInstance(label, dependencies[1]);
+        } else if (dependencies.length == 3) {
+            return (Instruction) cons.newInstance(label, dependencies[1], dependencies[2]);
+        } else if (dependencies.length == 4) {
+            return (Instruction) cons.newInstance(label, dependencies[2], dependencies[2], dependencies[3]);
+        } else {
+            throw new ClassNotFoundException();
+        }
+    }
+
     // The input line should consist of an SML instruction, with its label already removed.
     // Translate line into an instruction with label "label" and return the instruction
     public Instruction getInstruction(String label) {
@@ -89,6 +123,8 @@ public final class Translator {
         }
         var opCode = scan();
 
+
+
         switch (opCode) {
             case "add" -> {
                 r = scanInt();
@@ -103,10 +139,21 @@ public final class Translator {
                 return new SubInstruction(label, r, s1, s2);
             }
             case "mul" -> {
-                r = scanInt();
-                s1 = scanInt();
-                s2 = scanInt();
-                return new MulInstruction(label, r, s1, s2);
+//                r = scanInt();
+//                s1 = scanInt();
+//                s2 = scanInt();
+                try {
+                    return createReflectionWithCaseSwitch(label);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+//                return new MulInstruction(label, r, s1, s2);
             }
             case "div" -> {
                 r = scanInt();
@@ -124,10 +171,22 @@ public final class Translator {
                 return new LinInstruction(label, r, x);
             }
             case "bnz" -> {
-                s1 = scanInt();
-                L2 = scan();
-                LabelAccessor l2 = new LabelAccessor(L2);
-                return new BnzInstruction(label, s1, l2);
+//                s1 = scanInt();
+//                L2 = scan();
+//                LabelAccessor l2 = new LabelAccessor(L2);
+
+                try {
+                    return createReflectionWithCaseSwitch(label);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+//                return new BnzInstruction(label, s1, l2);
             }
 
             default -> {
