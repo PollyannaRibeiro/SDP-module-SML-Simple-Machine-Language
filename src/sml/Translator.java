@@ -9,6 +9,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.lang.String;
 
 /**
  * This class ....
@@ -75,17 +76,23 @@ public final class Translator {
         return true;
     }
 
-    private Instruction createReflectionWithCaseSwitch(String label) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException {
+//    REFLECTION
+    private Instruction createReflectionWithCaseSwitch(String opcode, String label) throws ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
-        Class<?> klass = Class.forName("sml.instructions.BnzInstruction");
-//        System.out.println("😅");
+//      find the path
+        char firstLetterOpcode = opcode.charAt(0);
+        String op = Character.toString(firstLetterOpcode).toUpperCase()+opcode.substring(1);
+
+        Class<?> klass = Class.forName("sml.instructions."+op+"Instruction");
+
         Constructor<?> cons = klass.getDeclaredConstructors()[0];
-        System.out.println(Arrays.toString(cons.getParameterTypes()));
-        System.out.println(Arrays.toString(cons.getAnnotatedParameterTypes()));
+//        System.out.println(Arrays.toString(cons.getParameterTypes()));
+//        System.out.println(Arrays.toString(cons.getAnnotatedParameterTypes()));
 
         Class<?>[] parameters = cons.getParameterTypes();
         Object[] dependencies = new Object[parameters.length];
-//start from 1 because we already have the label
+
+//      start from 1 because we already have the label
         for (int i = 1; i < parameters.length; i++) {
             Class<?> parameter =  parameters[i];
             if (parameter.getTypeName() == "java.lang.String") {
@@ -111,88 +118,26 @@ public final class Translator {
     // The input line should consist of an SML instruction, with its label already removed.
     // Translate line into an instruction with label "label" and return the instruction
     public Instruction getInstruction(String label) {
-        int s1; // Possible operands of the instruction
-        int s2;
-        int r;
-        int x;
-        String L2;
-        String lbl;
-
+        
         if (line.equals("")) {
             return null;
         }
         var opCode = scan();
 
 
-
-        switch (opCode) {
-            case "add" -> {
-                r = scanInt();
-                s1 = scanInt();
-                s2 = scanInt();
-                return new AddInstruction(label, r, s1, s2);
-            }
-            case "sub" -> {
-                r = scanInt();
-                s1 = scanInt();
-                s2 = scanInt();
-                return new SubInstruction(label, r, s1, s2);
-            }
-            case "mul" -> {
-//                r = scanInt();
-//                s1 = scanInt();
-//                s2 = scanInt();
-                try {
-                    return createReflectionWithCaseSwitch(label);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-//                return new MulInstruction(label, r, s1, s2);
-            }
-            case "div" -> {
-                r = scanInt();
-                s1 = scanInt();
-                s2 = scanInt();
-                return new DivInstruction(label, r, s1, s2);
-            }
-            case "out" -> {
-                s1 = scanInt();
-                return new OutInstruction(label, s1);
-            }
-            case "lin" -> {
-                r = scanInt();
-                x = scanInt();
-                return new LinInstruction(label, r, x);
-            }
-            case "bnz" -> {
-//                s1 = scanInt();
-//                L2 = scan();
-//                LabelAccessor l2 = new LabelAccessor(L2);
-
-                try {
-                    return createReflectionWithCaseSwitch(label);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-//                return new BnzInstruction(label, s1, l2);
-            }
-
-            default -> {
-                System.out.println("Unknown instruction: " + opCode);
-            }
+        try {
+            return createReflectionWithCaseSwitch(opCode, label);
+        } catch (ClassNotFoundException e) {
+            System.out.println("Unknown instruction: " + opCode);
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
+
         return null; // FIX THIS
     }
 
