@@ -80,13 +80,13 @@ public final class Translator {
         }
         var opCode = scan();
 
-        InstructionFactory factory = new InstructionFactory();
+        SingletonFactoryInstruction singleFactory = SingletonFactoryInstruction.getInstance();
+
         ScanAccessor scan = new ScanAccessor(
                 () ->{ return scanInt(); },
                 () ->{ return scan(); }
         );
-
-        return factory.createInstruction(label, opCode, scan);
+        return singleFactory.factory.createInstruction(label, opCode, scan);
     }
 
     /*
