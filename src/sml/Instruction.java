@@ -39,8 +39,6 @@ public abstract class Instruction {
 
   public abstract void execute(Machine m);
 
-  // =
-
   @Override
   public String toString() {
     return getLabel() + ": " + getOpcode();

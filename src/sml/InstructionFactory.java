@@ -17,9 +17,7 @@ public class InstructionFactory implements AbstractInstructionFactory {
             char firstLetterOpcode = opcode.charAt(0);
             String op = Character.toString(firstLetterOpcode).toUpperCase()+opcode.substring(1);
 
-            Class<?> klass = null;
-
-                klass = Class.forName("sml.instructions."+op+"Instruction");
+            Class<?> klass = Class.forName("sml.instructions."+op+"Instruction");
 
             Constructor<?> cons = klass.getDeclaredConstructors()[0];
 

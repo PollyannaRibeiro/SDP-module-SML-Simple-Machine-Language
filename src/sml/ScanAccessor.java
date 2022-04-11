@@ -1,19 +1,11 @@
 package sml;
 
-interface ScanInt {
-    int scan();
-};
-
-interface ScanString {
-    String scan();
-};
-
 public class ScanAccessor {
 
     private ScanInt scanInt;
     private ScanString scanString;
 
-    ScanAccessor(ScanInt scanInt, ScanString scanString){
+    public ScanAccessor(ScanInt scanInt, ScanString scanString){
         this.scanInt = scanInt;
         this.scanString = scanString;
     }

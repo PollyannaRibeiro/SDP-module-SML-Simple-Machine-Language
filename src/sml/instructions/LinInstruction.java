@@ -19,6 +19,6 @@ public class LinInstruction extends Instruction {
 
     @Override
     public String toString() {
-        return "Label: " + this.getLabel() + ", Store integer" + this.x + " in register " + this.register ;
+        return "Label: " + this.getLabel() + ", Store integer " + this.x + " in register " + this.register ;
     }
 }
