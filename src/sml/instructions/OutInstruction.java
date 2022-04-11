@@ -3,6 +3,7 @@ package sml.instructions;
 import sml.Instruction;
 import sml.Machine;
 
+
 public class OutInstruction extends Instruction {
     private int s1;
     public OutInstruction(String label, int s1) {
@@ -12,7 +13,8 @@ public class OutInstruction extends Instruction {
 
     @Override
     public void execute(Machine m) {
-        System.out.println("OUT: "+ m.getRegisters().getRegister(this.s1));
+        int value = m.getRegisters().getRegister(this.s1);
+        System.out.println(value);
     }
 
     @Override
