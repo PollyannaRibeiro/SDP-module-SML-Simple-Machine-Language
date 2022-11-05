@@ -1,12 +1,10 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-f059dc9a6f8d3a56e377f745f24479a46679e63a5d9fe6f495e02850cd0d8118.svg)](https://classroom.github.com/online_ide?assignment_repo_id=7029447&assignment_repo_type=AssignmentRepo)
+# Software Design and Programming - individual coursework
+
 # Simple (Small) Machine Language (SML)
 
 ### A coursework examining reflection and dependency injection
 
 + This assignment is to be completed individually.
-+ The sample code mentioned in the text can be found in this repository.
-
-<img src="/Users/keith/Documents/Courses/sdp-sp3/2021/coursework-small-machine-language/sml.jpg" alt="sml" style="zoom:67%;" />
 
 The aim of this assignment is to give you practice with 
 
@@ -17,14 +15,6 @@ The aim of this assignment is to give you practice with
 + and the use of reflection
 
 amongst other skills.
-
-## Details
-
-**Name**: Pollyanna Albuquerque Ribeiro
-
-**Your userid**: palbuq01
-
-Please do not forget to complete this part as too often we have "orphaned" repositories which can require months to sort out.
 
 ## The problem
 
